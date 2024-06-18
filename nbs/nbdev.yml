@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "pyliwc"
+  site-url: "https://camille1.github.io/pyliwc"
+  description: "LIWC analysis in Python"
+  repo-branch: main
+  repo-url: "https://github.com/camille1/pyliwc"
