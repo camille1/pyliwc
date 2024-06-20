@@ -1,0 +1,13 @@
+# nbdev_new
+# nbdev_export
+
+# pip install -e .
+
+nbdev_install_hooks
+
+# quarto
+nbdev_preview
+
+# all in one : export, test, clean, readme update
+nbdev_prepare
+
