@@ -17,24 +17,6 @@ pip install pyliwc
 Fill me in please! Don’t forget code examples:
 
 ``` python
-speeches = {
-    "Martin Luther King Jr.": "Five score years ago, a great American, in whose symbolic shadow we stand today, signed the Emancipation Proclamation. This momentous decree came as a great beacon light of hope to millions of Negro slaves who had been seared in the flames of withering injustice.",
-    "Abraham Lincoln": "Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure.",
-    "Winston Churchill": "I have nothing to offer but blood, toil, tears and sweat. We have before us an ordeal of the most grievous kind.",
-    "John F. Kennedy": "Vice President Johnson, Mr. Speaker, Mr. Chief Justice, President Eisenhower, Vice President Nixon, President Truman, Reverend Clergy, fellow citizens, we observe today not a victory of party but a celebration of freedom - symbolizing an end as well as a beginning - signifying renewal as well as change. For I have sworn before you and Almighty God the same solemn oath our forebears prescribed nearly a century and three quarters ago.",
-    "Nelson Mandela": "I greet you all in the name of peace, democracy and freedom for all. I stand here before you not as a prophet but as a humble servant of you, the people.",
-    "Charles de Gaulle": "Why a Free France? Because nothing is possible without it, nothing about France, nothing against France, nothing without France. The flame of French resistance must not and shall not die.",
-    "Mahatma Gandhi": "I want to speak to you as friends who have given me your ears, even though I am a stranger to you. I do not want your applause; I do not want your approval.",
-    "Eleanor Roosevelt": "This is no ordinary time, no time for weighing anything except what we can best do for the country as a whole. This is the time when we must know clearly what we are for, as well as what we are against, and what we are willing to die for, as well as what we are willing to live for.",
-    "Franklin D. Roosevelt": "Yesterday, December 7, 1941—a date which will live in infamy—the United States of America was suddenly and deliberately attacked by naval and air forces of the Empire of Japan. The United States was at peace with that nation and, at the solicitation of Japan, was still in conversation with its government and its emperor looking toward the maintenance of peace in the Pacific.",
-    "Malala Yousafzai": "Today it is an honor for me to be speaking again after a long time. Being here with such honorable people is a great moment in my life and it is an honor for me that today I am wearing a shawl of Benazir Bhutto shaheed.",
-    "Barack Obama": "My fellow citizens: I stand here today humbled by the task before us, grateful for the trust you have bestowed, mindful of the sacrifices borne by our ancestors. I thank President Bush for his service to our nation, as well as the generosity and cooperation he has shown throughout this transition.",
-}
-
-df = pd.DataFrame(speeches.items(), columns=["Author", "Sentences"])
-```
-
-``` python
 df
 ```
 
