@@ -10,7 +10,9 @@ import platform
 import shutil
 import os
 
-def liwc(texts: pd.Series, dict_: str= "LIWC22", return_input: bool= True) -> pd.DataFrame:
+def liwc(texts, dict_: str= "LIWC22", return_input: bool= True) -> pd.DataFrame:
+    if isinstance(texts, list):
+        texts = pd.Series(texts)
     """
     Calculate LIWC (Linguistic Inquiry and Word Count) scores for a pandas Series of text.
 

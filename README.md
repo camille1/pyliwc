@@ -16,9 +16,35 @@ pip install pyliwc
 
 Fill me in please! Don’t forget code examples:
 
+| **Author**             | **Sentences**                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Martin Luther King Jr. | Five score years ago, a great American, in whose symbolic shadow we stand today, signed the Emancipation Proclamation. This momentous decree came as a great beacon light of hope to millions of Negro slaves who had been seared in the flames of withering injustice.                                                                                                                                                                              |
+| Abraham Lincoln        | Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure.                                                                                                                                 |
+| Winston Churchill      | I have nothing to offer but blood, toil, tears and sweat. We have before us an ordeal of the most grievous kind.                                                                                                                                                                                                                                                                                                                                     |
+| John F. Kennedy        | Vice President Johnson, Mr. Speaker, Mr. Chief Justice, President Eisenhower, Vice President Nixon, President Truman, Reverend Clergy, fellow citizens, we observe today not a victory of party but a celebration of freedom - symbolizing an end as well as a beginning - signifying renewal as well as change. For I have sworn before you and Almighty God the same solemn oath our forebears prescribed nearly a century and three quarters ago. |
+| Nelson Mandela         | I greet you all in the name of peace, democracy and freedom for all. I stand here before you not as a prophet but as a humble servant of you, the people.                                                                                                                                                                                                                                                                                            |
+| Charles de Gaulle      | Why a Free France? Because nothing is possible without it, nothing about France, nothing against France, nothing without France. The flame of French resistance must not and shall not die.                                                                                                                                                                                                                                                          |
+| Mahatma Gandhi         | I want to speak to you as friends who have given me your ears, even though I am a stranger to you. I do not want your applause; I do not want your approval.                                                                                                                                                                                                                                                                                         |
+
 ``` python
-df
+speeches = ['Five score years ago, a great American, in whose symbolic shadow we stand today, signed the Emancipation Proclamation. This momentous decree came as a great beacon light of hope to millions of Negro slaves who had been seared in the flames of withering injustice.',
+ 'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure.',
+ 'I have nothing to offer but blood, toil, tears and sweat. We have before us an ordeal of the most grievous kind.',
+ 'Vice President Johnson, Mr. Speaker, Mr. Chief Justice, President Eisenhower, Vice President Nixon, President Truman, Reverend Clergy, fellow citizens, we observe today not a victory of party but a celebration of freedom - symbolizing an end as well as a beginning - signifying renewal as well as change. For I have sworn before you and Almighty God the same solemn oath our forebears prescribed nearly a century and three quarters ago.',
+ 'I greet you all in the name of peace, democracy and freedom for all. I stand here before you not as a prophet but as a humble servant of you, the people.',
+ 'Why a Free France? Because nothing is possible without it, nothing about France, nothing against France, nothing without France. The flame of French resistance must not and shall not die.',
+ 'I want to speak to you as friends who have given me your ears, even though I am a stranger to you. I do not want your applause; I do not want your approval.',
+ 'This is no ordinary time, no time for weighing anything except what we can best do for the country as a whole. This is the time when we must know clearly what we are for, as well as what we are against, and what we are willing to die for, as well as what we are willing to live for.',
+ 'Yesterday, December 7, 1941—a date which will live in infamy—the United States of America was suddenly and deliberately attacked by naval and air forces of the Empire of Japan. The United States was at peace with that nation and, at the solicitation of Japan, was still in conversation with its government and its emperor looking toward the maintenance of peace in the Pacific.',
+ 'Today it is an honor for me to be speaking again after a long time. Being here with such honorable people is a great moment in my life and it is an honor for me that today I am wearing a shawl of Benazir Bhutto shaheed.',
+ 'My fellow citizens: I stand here today humbled by the task before us, grateful for the trust you have bestowed, mindful of the sacrifices borne by our ancestors. I thank President Bush for his service to our nation, as well as the generosity and cooperation he has shown throughout this transition.']
 ```
+
+``` python
+liwc(df.Sentences).head(3) # also working with a pandas df
+```
+
+    Picked up JAVA_TOOL_OPTIONS: -Dfile.encoding=UTF-8
 
 <div>
 <style scoped>
@@ -33,24 +59,17 @@ df
     }
 </style>
 
-|     | Author                 | Sentences                                         |
-|-----|------------------------|---------------------------------------------------|
-| 0   | Martin Luther King Jr. | Five score years ago, a great American, in who... |
-| 1   | Abraham Lincoln        | Four score and seven years ago our fathers bro... |
-| 2   | Winston Churchill      | I have nothing to offer but blood, toil, tears... |
-| 3   | John F. Kennedy        | Vice President Johnson, Mr. Speaker, Mr. Chief... |
-| 4   | Nelson Mandela         | I greet you all in the name of peace, democrac... |
-| 5   | Charles de Gaulle      | Why a Free France? Because nothing is possible... |
-| 6   | Mahatma Gandhi         | I want to speak to you as friends who have giv... |
-| 7   | Eleanor Roosevelt      | This is no ordinary time, no time for weighing... |
-| 8   | Franklin D. Roosevelt  | Yesterday, December 7, 1941—a date which will ... |
-| 9   | Malala Yousafzai       | Today it is an honor for me to be speaking aga... |
-| 10  | Barack Obama           | My fellow citizens: I stand here today humbled... |
+|     | Row ID | Segment | WC  | Analytic | Clout | Authentic | Tone  | WPS  | BigWords | Dic   | ... | filler | AllPunc | Period | Comma | QMark | Exclam | Apostro | OtherP | Emoji | text                                              |
+|-----|--------|---------|-----|----------|-------|-----------|-------|------|----------|-------|-----|--------|---------|--------|-------|-------|--------|---------|--------|-------|---------------------------------------------------|
+| 0   | 0      | 1       | 44  | 96.16    | 86.82 | 20.79     | 86.79 | 22.0 | 18.18    | 81.82 | ... | 0      | 11.36   | 4.55   | 6.82  | 0.0   | 0      | 0       | 0.0    | 0     | Five score years ago, a great American, in who... |
+| 1   | 1      | 1       | 54  | 33.38    | 72.07 | 86.01     | 48.44 | 27.0 | 24.07    | 90.74 | ... | 0      | 14.81   | 3.70   | 11.11 | 0.0   | 0      | 0       | 0.0    | 0     | Four score and seven years ago our fathers bro... |
+| 2   | 2      | 1       | 22  | 45.12    | 66.75 | 20.79     | 1.00  | 11.0 | 9.09     | 81.82 | ... | 0      | 18.18   | 9.09   | 9.09  | 0.0   | 0      | 0       | 0.0    | 0     | I have nothing to offer but blood, toil, tears... |
 
+<p>3 rows × 121 columns</p>
 </div>
 
 ``` python
-results = liwc(df.Sentences)
+results = liwc(speeches)
 results
 ```
 
