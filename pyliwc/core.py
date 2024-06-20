@@ -6,6 +6,7 @@ __all__ = ['liwc']
 # %% ../nbs/00_core.ipynb 3
 import pandas as pd
 import subprocess
+import platform
 import shutil
 import os
 
@@ -33,8 +34,13 @@ def liwc(texts: pd.Series, dict_: str= "LIWC22", return_input: bool= True) -> pd
     # Write the input text to a CSV file
     texts.reset_index().to_csv(f"{liwc_dir}/{input_name}", index=False)
 
+    is_wsl = 'microsoft' in platform.release().lower()
+
+    # check os 
+    cmd_to_execute = ["LIWC-22-cli.exe"] if is_wsl else ["LIWC-22-cli"]
+
     # Define the command to execute the LIWC-22-cli tool
-    cmd_to_execute = ["LIWC-22-cli.exe",
+    cmd_to_execute += [
                       "--mode", "wc",
                       "--input", f"{liwc_dir}/{input_name}",
                       "--row-id-indices", "1",
