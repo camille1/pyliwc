@@ -5,4 +5,6 @@ d = { 'settings': { 'branch': 'main',
                 'doc_host': 'https://camille1.github.io',
                 'git_url': 'https://github.com/camille1/pyliwc',
                 'lib_path': 'pyliwc'},
-  'syms': {'pyliwc.core': {'pyliwc.core.foo': ('core.html#foo', 'pyliwc/core.py')}}}
+  'syms': { 'pyliwc.core': {'pyliwc.core.foo2': ('core.html#foo2', 'pyliwc/core.py')},
+            'pyliwc.process': { 'pyliwc.process.foo': ('process.html#foo', 'pyliwc/process.py'),
+                                'pyliwc.process.liwc': ('process.html#liwc', 'pyliwc/process.py')}}}
