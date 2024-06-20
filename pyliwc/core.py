@@ -4,9 +4,59 @@
 __all__ = ['liwc']
 
 # %% ../nbs/00_core.ipynb 3
-def liwc(): 
-    "Say hello to somebody"
-    import pandas as pd
-    print("camille liwc")
-    print(pd.__version__)
-    print("camille liwc")
+import pandas as pd
+import subprocess
+import shutil
+import os
+
+def liwc(texts: pd.Series, dict_: str= "LIWC22", return_input: bool= True) -> pd.DataFrame:
+    """
+    Calculate LIWC (Linguistic Inquiry and Word Count) scores for a pandas Series of text.
+
+    Parameters:
+    text (pd.Series): A pandas Series containing the text to be analyzed.
+    dict_ (str): The name of the LIWC dictionary to use, or the path to a custom dictionary file.
+                 Allowed values are "LIWC2001", "LIWC2007", "LIWC2015", "DE-LIWC2015", "LIWC22",
+                 "CHNSIMPLLIWC2015", "CHNTRADLIWC2015", "JLIWC2015", "ESLIWC2007", and "MRLIWC2015".
+
+    Returns:
+    pd.DataFrame: A pandas DataFrame containing the LIWC scores for each text in the input Series.
+    """
+    liwc_dir = 'LIWC_tmp'
+    input_name = 'liwc_input.csv'
+    output_name = 'liwc_output.csv'
+
+    # Create the temporary directory if it doesn't exist
+    if not os.path.exists(liwc_dir):
+        os.mkdir(liwc_dir)
+
+    # Write the input text to a CSV file
+    texts.reset_index().to_csv(f"{liwc_dir}/{input_name}", index=False)
+
+    # Define the command to execute the LIWC-22-cli tool
+    cmd_to_execute = ["LIWC-22-cli.exe",
+                      "--mode", "wc",
+                      "--input", f"{liwc_dir}/{input_name}",
+                      "--row-id-indices", "1",
+                      "--column-indices", "2",
+                      "--d", dict_,
+                      "--output", f"{liwc_dir}/{output_name}",
+                      #"--t", "8" # threads, default n-1
+                      ]
+
+    # Execute the command
+    subprocess.call(cmd_to_execute)
+
+    # Read the output CSV file into a pandas DataFrame
+    r = pd.read_csv(f"{liwc_dir}/{output_name}")
+    if return_input:
+        r['text'] = texts.values
+    # Delete the temporary directory
+    shutil.rmtree(liwc_dir)
+
+    return r
+     
+# masculine_feminine_dict 
+
+# liwc(d, dict_)
+     
