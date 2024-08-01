@@ -15,3 +15,8 @@ nbdev_prepare
 
 # Updated nbs/index.ipynb with your own information.
 
+# in __init__ : add "from .core import Liwc" --> direct import
+
+# LIWC-22.exe --mode -wc --help 
+
+# nbdev_test --n_workers 1

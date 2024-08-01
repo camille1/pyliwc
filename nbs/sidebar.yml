@@ -2,4 +2,13 @@ website:
   sidebar:
     contents:
       - index.ipynb
+      - installation.ipynb
+      - quickstart.ipynb
+      - how-to-use.ipynb
+      - section: Tutorials
+        contents:
+          - tutorial1_US_presidents.ipynb
+          - tutorial2_custom_dictionaries.ipynb
       - 00_core.ipynb
+      - license.ipynb
+      - about.ipynb
