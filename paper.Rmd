@@ -135,6 +135,10 @@ The output of the narrative arc analysis is presented in the Table 1 and illustr
 
 The LIWC framework has facilitated numerous research projects across the social sciences, demonstrating its broad applicability [@humphreys_automated_2017; @berger_uniting_2019]. By leveraging LIWC's comprehensive dictionaries, `pyliwc` assists researchers in advancing linguistic research, conducting large-scale analyses, and deepening our understanding of human language.
 
+#  Availability and Documentation
+`pyliwc` is available under the MIT License. The library may be cloned from the GitHub
+repository, or can be installed by pip: pip install pyliwc. Documentation is provided via Quarto, including a quickstart introducing major functionality and a detailed API reference.
+Extensive unit testing is employed throughout the library.
 
 # References
 

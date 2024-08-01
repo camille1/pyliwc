@@ -23,3 +23,9 @@ nbdev_prepare
 # hide #ipynb-filters: [nbdev_filter] --> in_quarto.yml pour eviter bug deploy github actions
 
 #nvdev_release (both pypi and conda)
+
+
+# nbdev_release_git --token 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__cam__enl
+
+
+nano ~/.pypirc

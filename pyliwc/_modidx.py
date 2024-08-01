@@ -2,8 +2,8 @@
 
 d = { 'settings': { 'branch': 'main',
                 'doc_baseurl': '/pyliwc',
-                'doc_host': 'https://camille1.github.io',
-                'git_url': 'https://github.com/camille1/pyliwc',
+                'doc_host': 'https://camillelacan.github.io',
+                'git_url': 'https://github.com/camillelacan/pyliwc',
                 'lib_path': 'pyliwc'},
   'syms': { 'pyliwc.core': { 'pyliwc.core.Liwc': ('core.html#liwc', 'pyliwc/core.py'),
                              'pyliwc.core.Liwc.__init__': ('core.html#__init__', 'pyliwc/core.py'),

@@ -85,9 +85,7 @@ Contextualizer.
 
 # Installation
 
-You can install `pyliwc` via pip or conda, which are popular package
-management systems for Python. Here are the instructions for both
-methods:
+You can install `pyliwc` via pip in Python.
 
 Requirements : \* Python 3.6 or above \* LIWC software
 
@@ -95,12 +93,6 @@ Requirements : \* Python 3.6 or above \* LIWC software
 
 ``` sh
 pip install pyliwc
-```
-
-**Or using Conda**
-
-``` sh
-conda install -c pyliwc
 ```
 
 # Quickstart
