@@ -20,3 +20,6 @@ nbdev_prepare
 # LIWC-22.exe --mode -wc --help 
 
 # nbdev_test --n_workers 1
+# hide #ipynb-filters: [nbdev_filter] --> in_quarto.yml pour eviter bug deploy github actions
+
+#nvdev_release (both pypi and conda)
