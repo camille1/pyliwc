@@ -1,11 +1,6 @@
 # Welcome to `pyliwc`
 
 
-``` python
-%load_ext autoreload
-%autoreload 2
-```
-
 > *Linguistic Inquiry and Word Count* in Python
 
 # Overview
@@ -137,7 +132,7 @@ computer — it is required for using all methods
 
 <!-- ![liwc22_interface.jpg](images/liwc22_interface.jpg) -->
 
-<img src="images/liwc22_interface.jpg" width="350">
+<img src="./nbs/images/liwc22_interface.jpg" width="350">
 
 **Analyze a string using the default dictionary (LIWC22)**
 
