@@ -80,7 +80,7 @@ The package offers a wide range of features, including:
 This short example illustrates how to use the `pyliwc` package to analyze the linguistic styles and psychological attributes of inaugural addresses from four U.S. Presidents: George W. Bush, Barack Obama, Donald Trump, and Joe Biden. 
 
 
-```{python, eval=FALSE}
+```{python}
 
 from pyliwc import Liwc
 import pandas as pd
@@ -100,7 +100,7 @@ print(result_df)
 
 **Narrative Arc Analysis** aims to analyze the structure and flow of narratives within text data [@boyd_narrative_2020]. It provides insights into how narratives evolve over time and helps to identify the progression of thematic elements within a text.
 
-```{python, eval=FALSE}
+```{python}
 
 # Analyze the narrative arc of the speeches
 arc = liwc.narrative_arc(
