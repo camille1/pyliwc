@@ -118,7 +118,7 @@ liwc.plot_narrative_arc(df=arc)
 
 ```
 
-The output of the narrative arc analysis is presented in the Table 1 and illustrated in the Figure 1
+The output of the narrative arc analysis is presented in the Table 1 and illustrated in the Figure 1.
 
 **Table 1: Results of Narrative Arc Analysis**
 
