@@ -1,5 +1,8 @@
-# Welcome to `pyliwc`
 
+
+![CI](https://github.com/fastai/nbdev/actions/workflows/test.yaml/badge.svg)
+
+# Welcome to `pyliwc`
 
 > *Linguistic Inquiry and Word Count* in Python
 

@@ -27,4 +27,5 @@ d = { 'settings': { 'branch': 'main',
                              'pyliwc.core._LIWCDictionary.get_trie': ('core.html#get_trie', 'pyliwc/core.py'),
                              'pyliwc.core._LIWCDictionary.parse': ('core.html#parse', 'pyliwc/core.py'),
                              'pyliwc.core._LIWCDictionary.search': ('core.html#search', 'pyliwc/core.py'),
-                             'pyliwc.core._LIWCDictionary.word_in_categories': ('core.html#word_in_categories', 'pyliwc/core.py')}}}
+                             'pyliwc.core._LIWCDictionary.word_in_categories': ('core.html#word_in_categories', 'pyliwc/core.py'),
+                             'pyliwc.core.analyze_df2': ('core.html#analyze_df2', 'pyliwc/core.py')}}}
