@@ -1,6 +1,6 @@
 
 
-![CI](https://github.com/fastai/nbdev/actions/workflows/test.yaml/badge.svg)
+![CI](https://github.com/camille1/pyliwc/actions/workflows/test.yaml/badge.svg)
 
 # Welcome to `pyliwc`
 
