@@ -4,11 +4,11 @@
 
 # Welcome to `pyliwc`
 
-> *Linguistic Inquiry and Word Count* in Python
+> Linguistic Inquiry and Word Count* in Python
 
 # Overview
 
-`PyLIWC` is a Python package designed to provide an interface for
+`pyliwc` is a Python package designed to provide an interface for
 analyzing text using the LIWC (Linguistic Inquiry and Word Count) tool.
 This package allows users to interact with the LIWC CLI from within
 Python, offering features for processing various data formats,

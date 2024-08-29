@@ -1,5 +1,5 @@
 ---
-title: "PYLIWC: Linguistic Inquiry and Word Count in Python"
+title: "pyliwc: Linguistic Inquiry and Word Count in Python"
 tags:
   - Python
   - Linguistic Inquiry
@@ -25,6 +25,13 @@ Linguistic Inquiry and Word Count (LIWC), developed by @pennebaker_linguistic_20
 
 `pyliwc` addresses this limitation by allowing the use of the LIWC dictionary in Python. `pyliwc` includes functions to run LIWC analysis with internal or custom dictionaries, enabling efficient text analysis. This package handles large text corpora from Pandas DataFrames or text files, making it efficient for text analysis. Finally, `pyliwc` includes additional features like language style matching and narrative arc analysis, making it a comprehensive tool for linguistic and social science research.
 
+# Licensing requirements
+
+The "pyliwc" Python package serves as an interface for using the LIWC software and its dictionaries. To utilize this package effectively, users must have a valid academic LIWC license. This license is necessary to access both the proprietary LIWC dictionaries and any custom dictionaries created by users.
+
+Please ensure that you have acquired the appropriate LIWC software license before attempting to use the "pyliwc" package.
+
+Please visit the [LIWC website](https://www.liwc.app/) for installation instructions.
 
 
 # Statement of need
