@@ -1,0 +1,149 @@
+package:
+  name: pyliwc
+  version: 0.0.2
+source:
+  sha256: e4160262662b398cbc096d7256046145f9d70f7da400e749bf66913eaeb64fb0
+  url: https://files.pythonhosted.org/packages/4f/41/d118c8d4c53a74cc4f69b5291317000cb2b9a15da82185beacbb4dcc4617/pyliwc-0.0.2.tar.gz
+about:
+  description: "\n\n![CI](https://github.com/camille1/pyliwc/actions/workflows/test.yaml/badge.svg)\n\
+    \n# Welcome to `pyliwc`\n\n> Linguistic Inquiry and Word Count* in Python\n\n\
+    # Overview\n\n`pyliwc` is a Python package designed to provide an interface for\n\
+    analyzing text using the LIWC (Linguistic Inquiry and Word Count) tool.\nThis\
+    \ package allows users to interact with the LIWC CLI from within\nPython, offering\
+    \ features for processing various data formats,\nperforming linguistic style matching,\
+    \ and analyzing narrative arcs in\ntext data. It can handle folders, text files\
+    \ or `Pandas` dataframes.\n\nAs the LIWC dictionary is proprietary software, this\
+    \ requires that you\nhave installed the latest version of the LIWC software on\
+    \ your machine,\nwith an activated licence (academic licence).\n\n# Manifest\n\
+    \nThe LIWC (Linguistic Inquiry and Word Count) software by James W.\nPennebaker,\
+    \ Roger J. Booth, and Martha E. Francis has been instrumental\nfor countless researchers\
+    \ in analyzing linguistic and psycholinguistic\ndata. Linguistic Inquiry and Word\
+    \ Count (LIWC) is the gold standard of\ndictionary-based approaches for analyzing\
+    \ word use. It can be used to\nstudy a single individual, groups of people over\
+    \ time, or all of social\nmedia.However, LIWC has traditionally been available\
+    \ through software,\nnecessitating the usage of an outside software to the Python\n\
+    environement.\n\nRecognizing the growing popularity of Python in the scientific\
+    \ and\nresearch community, there is an important need for researchers and data\n\
+    scientists for integrating LIWC directly into their Python workflows.\nThus, `pyliwc`\
+    \ brings (many of) the functionality of LIWC to a wider\naudience without the\
+    \ need use the LIWC application as GUI. `pyliwc` is\nopen-source, released under\
+    \ the MIT license, and is designed to enable\nresearchers to perform sophisticated\
+    \ linguistic analysis directly in\nPython.\n\n# Features\n\nThe package offers\
+    \ a wide range of features, including:\n\n1.  **LIWC Text Analysis:**\n\n- Analyze\
+    \ text data from various sources, including CSV files,\n  directories, Pandas\
+    \ DataFrames, and individual strings.\n- Supports internal dictionaries (e.g.,\
+    \ LIWC22, LIWC2015) as well as\n  adhoc dictionaries\n- Output results directly\
+    \ in a convenient Pandas DataFrame for easy\n  integration with other data processing\
+    \ tools.\n\n2.  **Linguistic Style Matching (LSM):**\n\n- Perform person and group-level\
+    \ LSM analysis using a DataFrame to\n  evaluate the alignment of linguistic styles\
+    \ in conversational data.\n- Supports pairwise LSM calculations for detailed analysis\
+    \ of\n  interpersonal communication dynamics.\n\n3.  **Narrative Arc Analysis:**\n\
+    \n- Analyze the narrative arc of text data to understand staging,\n  progression,\
+    \ and cognitive tension, offering deep insights into\n  storytelling elements.\n\
+    - Graphics capabilities are included, allowing users to visualize\n  narrative\
+    \ structures: staging, plot progression, and cognitive tension\n  over time.\n\
+    - Provides customizable scaling methods and segment options for precise\n  control\
+    \ over the analysis process.\n\n4.  **Integration with LIWC CLI:** Seamlessly\
+    \ execute LIWC commands and\n    capture output for further processing, leveraging\
+    \ the full power of\n    LIWC\u2019s linguistic analysis capabilities. Multithreading\
+    \ support for\n    improved performance and faster analysis across large datasets.\n\
+    \n5.  **Output Options:** Flexible output formats, including CSV, JSON,\n    and\
+    \ direct integration with Pandas DataFrames, ensuring\n    compatibility with\
+    \ a wide range of data analysis workflows.\n\n------------------------------------------------------------------------\n\
+    \n**Missing Features:** In the current version, the following features\nhave not\
+    \ yet been ported : Word frequencies, Meaning extraction and\nContextualizer.\n\
+    \n# Installation\n\nYou can install `pyliwc` via pip in Python.\n\nRequirements\
+    \ : \\* Python 3.6 or above \\* LIWC software\n\n**Using pip**\n\n``` sh\npip\
+    \ install pyliwc\n```\n\n# Quickstart\n\nHere\u2019s a quickstart guide, explaining\
+    \ how to use `pyliwc` perform text\nanalysis.\n\n`Liwc` is the main class for\
+    \ interacting with the LIWC CLI.\n\n``` python\nliwc = Liwc(liwc_cli_path='LIWC-22-cli',\
+    \ threads=None, verbose=True) \n```\n\n**Parameters**: - liwc_cli_path (str):\
+    \ Path to the LIWC CLI executable.\nDefault is \u2018LIWC-22-cli\u2019. On WSL,\
+    \ it is required to add .exe at the end\n\u2018LIWC-22-cli.exe\u2019, - threads\
+    \ (int, optional): Number of threads to use.\nDefaults to the number of CPU cores\
+    \ minus one. - verbose (bool,\noptional): If True, display printing such as progress\
+    \ bar for large\nfiles. Defaults to False.\n\nThe main Class of `Pyliwc` is `Liwc`.\n\
+    \n<div class=\"alert alert-info\">\n\nNote: Make sure that you have `LIWC-22`\
+    \ software running on your\ncomputer \u2014 it is required for using all methods\n\
+    \n</div>\n\n<!-- ![liwc22_interface.jpg](images/liwc22_interface.jpg) -->\n\n\
+    <img src=\"./nbs/images/liwc22_interface.jpg\" width=\"350\">\n\n**Analyze a string\
+    \ using the default dictionary (LIWC22)**\n\n``` python\nfrom pyliwc import Liwc\n\
+    \nliwc = Liwc('LIWC-22-cli.exe')\n\ntext = \"This is a sample text for LIWC analysis.\"\
+    \n\nr = liwc.analyze_string_to_json(text)\n```\n\n    Picked up JAVA_TOOL_OPTIONS:\
+    \ -Dfile.encoding=UTF-8\n\n``` python\n{\n    'Segment': 1,\n    'WC': 8,\n  \
+    \  'Analytic': 89.52,\n    'Clout': 40.06,\n    'Authentic': 15.38,\n    'Tone':\
+    \ 20.23,\n    'WPS': 8,\n    'BigWords': 12.5,\n    'Dic': 100,\n    'Linguistic':\
+    \ 62.5,\n    'function': 50,\n    'pronoun': 12.5,\n    'ppron': 0,\n    'i':\
+    \ 0,\n    'we': 0,\n    'you': 0,\n    ... ,\n    'AllPunc': 12.5,\n    'Period':\
+    \ 12.5,\n    'Comma': 0,\n    'QMark': 0,\n    'Exclam': 0,\n    'Apostro': 0,\n\
+    \    'OtherP': 0,\n    'Emoji': 0\n}\n\n```\n\n**Analyzing Texts from a `pandas`\
+    \ DataFrame**\n\n``` python\nimport pandas as pd\ndf = pd.read_csv('../data/US-president.csv')\n\
+    ```\n\n``` python\nfrom pyliwc import Liwc\n\nliwc = Liwc('LIWC-22-cli.exe')\n\
+    \nliwc.analyze_df(df.Text, liwc_dict=\"LIWC22\")\n```\n\n<div>\n<style scoped>\n\
+    \    .dataframe tbody tr th:only-of-type {\n        vertical-align: middle;\n\
+    \    }\n&#10;    .dataframe tbody tr th {\n        vertical-align: top;\n    }\n\
+    &#10;    .dataframe thead th {\n        text-align: right;\n    }\n</style>\n\n\
+    |        | Segment | WC   | Analytic | Clout | Authentic | Tone  | WPS   | BigWords\
+    \ | Dic   | Linguistic | ... | nonflu | filler | AllPunc | Period | Comma | QMark\
+    \ | Exclam | Apostro | OtherP | Emoji |\n|--------|---------|------|----------|-------|-----------|-------|-------|----------|-------|------------|-----|--------|--------|---------|--------|-------|-------|--------|---------|--------|-------|\n\
+    | Row ID |         |      |          |       |           |       |       |   \
+    \       |       |            |     |        |        |         |        |    \
+    \   |       |        |         |        |       |\n| 0      | 1       | 1592 |\
+    \ 52.22    | 93.17 | 34.71     | 79.12 | 16.58 | 22.49    | 91.21 | 66.46    \
+    \  | ... | 0      | 0      | 14.20   | 5.97   | 6.53  | 0.06  | 0      | 0.63\
+    \    | 1.01   | 0     |\n| 1      | 1       | 2389 | 51.22    | 95.37 | 36.07\
+    \     | 54.01 | 20.25 | 19.21    | 90.37 | 68.48      | ... | 0      | 0     \
+    \ | 12.98   | 5.11   | 6.20  | 0.00  | 0      | 0.54    | 1.13   | 0     |\n|\
+    \ 2      | 1       | 1457 | 46.94    | 98.19 | 42.58     | 82.46 | 16.19 | 21.89\
+    \    | 91.08 | 66.78      | ... | 0      | 0      | 15.31   | 6.18   | 7.28  |\
+    \ 0.00  | 0      | 0.75    | 1.10   | 0     |\n| 3      | 1       | 2548 | 43.37\
+    \    | 91.33 | 50.66     | 45.63 | 15.35 | 17.39    | 93.21 | 71.15      | ...\
+    \ | 0      | 0      | 19.66   | 6.28   | 9.11  | 0.39  | 0      | 1.69    | 2.20\
+    \   | 0     |\n\n<p>4 rows \xD7 119 columns</p>\n</div>\n\n- Change to other dictionary:\
+    \ \u201CLIWC2015\u201D\n\n``` python\nliwc_dict = \"LIWC2015\" \n\nliwc.analyze_df(df.Text,\
+    \ liwc_dict=liwc_dict)\n```\n\n<div>\n<style scoped>\n    .dataframe tbody tr\
+    \ th:only-of-type {\n        vertical-align: middle;\n    }\n&#10;    .dataframe\
+    \ tbody tr th {\n        vertical-align: top;\n    }\n&#10;    .dataframe thead\
+    \ th {\n        text-align: right;\n    }\n</style>\n\n|        | Segment | WC\
+    \   | Analytic | Clout | Authentic | Tone  | WPS   | Sixltr | Dic   | function\
+    \ | ... | Colon | SemiC | QMark | Exclam | Dash | Quote | Apostro | Parenth |\
+    \ OtherP | Emoji |\n|--------|---------|------|----------|-------|-----------|-------|-------|--------|-------|----------|-----|-------|-------|-------|--------|------|-------|---------|---------|--------|-------|\n\
+    | Row ID |         |      |          |       |           |       |       |   \
+    \     |       |          |     |       |       |       |        |      |     \
+    \  |         |         |        |       |\n| 0      | 1       | 1592 | 65.12 \
+    \   | 92.38 | 30.27     | 89.13 | 16.58 | 22.49  | 89.38 | 53.33    | ... | 0.38\
+    \  | 0.38  | 0.06  | 0      | 0.00 | 0.25  | 0.63    | 0       | 0.00   | 0  \
+    \   |\n| 1      | 1       | 2389 | 64.97    | 93.13 | 33.34     | 74.15 | 20.25\
+    \ | 19.21  | 87.57 | 55.04    | ... | 0.13  | 0.21  | 0.00  | 0      | 0.63 |\
+    \ 0.08  | 0.54    | 0       | 0.08   | 0     |\n| 2      | 1       | 1457 | 57.63\
+    \    | 96.73 | 40.07     | 87.87 | 16.19 | 21.89  | 87.99 | 53.12    | ... | 0.55\
+    \  | 0.34  | 0.00  | 0      | 0.07 | 0.14  | 0.75    | 0       | 0.00   | 0  \
+    \   |\n| 3      | 1       | 2548 | 58.30    | 91.76 | 44.26     | 62.24 | 15.35\
+    \ | 17.39  | 90.07 | 55.42    | ... | 0.90  | 0.39  | 0.39  | 0      | 0.16 |\
+    \ 0.63  | 1.69    | 0       | 0.12   | 0     |\n\n<p>4 rows \xD7 95 columns</p>\n\
+    </div>\n"
+  dev_url: https://github.com/camillelacan/pyliwc
+  doc_url: https://camillelacan.github.io/pyliwc
+  home: https://github.com/camillelacan/pyliwc
+  license: Apache Software
+  license_family: APACHE
+  summary: Linguistic Inquiry and Word Count (LIWC) in Python
+build:
+  noarch: python
+  number: '0'
+  script: '{{ PYTHON }} -m pip install . -vv'
+extra:
+  recipe-maintainers:
+  - camillelacan
+requirements:
+  host:
+  - packaging
+  - python >=3.7
+  run:
+  - packaging
+  - python >=3.7
+  - pandas
+  - matplotlib
+test:
+  imports:
+  - pyliwc
