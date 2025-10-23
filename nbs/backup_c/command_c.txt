@@ -25,11 +25,11 @@ nbdev_prepare
 #nvdev_release (both pypi and conda)
 
 
-# nbdev_release_git --token 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_Camille --> rm end
+# nbdev_release_git --token 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48 --> (moins -2 dept loz fin)
 
 
 
 # sinon : export GITHUB_TOKEN="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48" (moins -2 dept loz fin)
 nano ~/.pypirc
 
-# pypi (cf compte jeton APi) : 934dc24c-16db-4c66-a4ce-06460c63290148 (idem)
+# pypi (cf compte jeton APi) : https://pypi.org/manage/account/token/?selected_project=pyliwc
