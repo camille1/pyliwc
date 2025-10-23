@@ -3,7 +3,7 @@ project:
 
 website:
   title: "pyliwc"
-  site-url: "https://camille1.github.io/pyliwc"
-  description: "LIWC analysis in Python"
+  site-url: "https://camillelacan.github.io/pyliwc"
+  description: "Linguistic Inquiry and Word Count (LIWC) in Python"
   repo-branch: main
-  repo-url: "https://github.com/camille1/pyliwc"
+  repo-url: "https://github.com/camillelacan/pyliwc"
