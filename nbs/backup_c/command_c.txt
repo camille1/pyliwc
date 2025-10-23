@@ -25,7 +25,10 @@ nbdev_prepare
 #nvdev_release (both pypi and conda)
 
 
-# nbdev_release_git --token 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_Camille --> rm end
+# nbdev_release_git --token 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_Camille --> rm end
 
-# sinon : export GITHUB_TOKEN="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_Camille"
+
+
+# sinon : export GITHUB_TOKEN="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_Camille"
 nano ~/.pypirc
+
