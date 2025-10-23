@@ -29,6 +29,7 @@ nbdev_prepare
 
 
 
-# sinon : export GITHUB_TOKEN="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_Camille"
+# sinon : export GITHUB_TOKEN="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48" (moins -2 dept loz fin)
 nano ~/.pypirc
 
+# pypi (cf compte jeton APi) : 934dc24c-16db-4c66-a4ce-06460c63290148 (idem)
