@@ -99,68 +99,29 @@ def analyze_csv(self: Liwc,
     # preserve raw input strings
     input_file = rf'{input_file}'
     output_location = rf'{output_location}'
-
-    # use absolute Python-side paths for reliable reading/writing
-    abs_in = os.path.abspath(input_file)
-    abs_out = os.path.abspath(output_location)
-
-    # paths passed to the CLI. default to Python absolute paths.
-    in_cli, out_cli = abs_in, abs_out
-
-    # If running in WSL, convert to Windows paths (wslpath -w) when available.
-    if _is_wsl():
-        try:
-            in_cli = to_windows_path(abs_in)
-            out_cli = to_windows_path(abs_out)
-        except Exception:
-            # fallback: keep Linux absolute paths (may fail if LIWC is a Windows exe)
-            in_cli, out_cli = abs_in, abs_out
-
     cmd_to_execute = [
-        self.liwc_cli_path, "--mode", "wc", "--input", in_cli, 
+        self.liwc_cli_path, "--mode", "wc", "--input", input_file, 
         "--row-id-indices", row_id_indices, "--column-indices", column_indices, 
-        "--output", out_cli, "--t", self.threads
+        "--output", output_location, "--t", self.threads
     ]
     if liwc_dict != "LIWC22":
         cmd_to_execute.extend(["--dictionary", liwc_dict])
     self._execute_command(cmd_to_execute)
 
 @patch
-def analyze_folder(self: Liwc,
-                   input_folder: str, # Path to the folder containing text files.
-                   output_location: str, # Path to save the analysis output.
-                   liwc_dict: str = "LIWC22") -> None: # Dictionary to use for analysis. Defaults to "LIWC22".
+def analyze_folder(self:Liwc,
+                    input_folder: str, # Path to the folder containing text files.
+                    output_location: str, # Path to save the analysis output.
+                    liwc_dict: str = "LIWC22") -> None: # Dictionary to use for analysis. Defaults to "LIWC22".
     """
     Analyze all text files in a folder using LIWC.
-    """
 
-    # preserve raw input strings
+    """
     input_folder = rf'{input_folder}'
     output_location = rf'{output_location}'
-
-
-    # use absolute Python-side paths for reliable reading/writing
-    abs_in = input_folder if _looks_like_windows_path(input_folder) else os.path.abspath(input_folder)
-    abs_out = output_location if _looks_like_windows_path(output_location) else os.path.abspath(output_location)
-
-    # paths passed to the CLI. default to Python absolute paths.
-    in_cli, out_cli = abs_in, abs_out
-
-    # If running in WSL, convert to Windows paths (wslpath -w) when available.
-    # Do not reconvert if already Windows-style paths.
-    if _is_wsl():
-        try:
-            if not _looks_like_windows_path(abs_in):
-                in_cli = to_windows_path(abs_in)
-            if not _looks_like_windows_path(abs_out):
-                out_cli = to_windows_path(abs_out)
-        except Exception:
-            # fallback: keep Linux absolute paths (may fail if LIWC is a Windows exe)
-            in_cli, out_cli = abs_in, abs_out
-
     cmd_to_execute = [
-        self.liwc_cli_path, "--mode", "wc", "--input", in_cli,
-        "--output", out_cli, "--t", self.threads
+        self.liwc_cli_path, "--mode", "wc", "--input", input_folder, 
+        "--output", output_location, "--t", self.threads
     ]
     if liwc_dict != "LIWC22":
         cmd_to_execute.extend(["--dictionary", liwc_dict])
@@ -179,33 +140,33 @@ def analyze_df(self:Liwc,
 
     """
     with tempfile.TemporaryDirectory() as tmpdir:
-        in_path = os.path.join(tmpdir, "temp_in.csv")
-        out_path = os.path.join(tmpdir, "temp_out.csv")
+        input_path = os.path.join(tmpdir, "temp_in.csv")
+        output_path = os.path.join(tmpdir, "temp_out.csv")
 
-        # écriture input (index + texte)
-        text.reset_index().to_csv(in_path, index=False, encoding='utf-8')
+        # write input (index + texte). indices "1" and "2" for CLI.
+        text.reset_index().to_csv(input_path, index=False, encoding='utf-8')
 
-        # chemins absolus côté Python (pour lecture après exécution)
-        abs_in = os.path.abspath(in_path)
-        abs_out = os.path.abspath(out_path)
+        # use absolute paths
+        abs_in = os.path.abspath(input_path)
+        abs_out = os.path.abspath(output_path)
 
-        # chemins passés au CLI (par défaut les mêmes que Python)
         in_cli, out_cli = abs_in, abs_out
 
-        # si demandé et si WSL, convertir en chemins Windows (wslpath -w)
+        # If requested and running in WSL, convert to Windows paths
         if _is_wsl():
             try:
                 in_cli = to_windows_path(abs_in)
                 out_cli = to_windows_path(abs_out)
             except Exception:
-                # fallback : garder les chemins Linux/absolus
+                # fallback: keep linux paths (but LIWC on Windows may fail)
                 in_cli, out_cli = abs_in, abs_out
 
-        # appel du CLI (utilise in_cli/out_cli)
+        # call the CLI. LIWC must be runnable from this environment.
         self.analyze_csv(in_cli, out_cli, "1", "2", liwc_dict=liwc_dict)
 
-        # lire les résultats via le chemin Python (abs_out)
-        result_df = pd.read_csv(abs_out, encoding='utf-8').set_index('Row ID')
+        # read output using the Python-side path (the file lives in tmpdir)
+        # use the Python path (abs_out) not out_cli because out_cli may be Windows form.
+        result_df = pd.read_csv(output_path, encoding='utf-8').set_index('Row ID')
 
         if return_input:
             result_df.insert(0, 'text', text.values)
@@ -500,27 +461,10 @@ def analyze_lsm(self:Liwc,
     # Write DataFrame to CSV file
     df.to_csv(input_path, index=False)
     
-    # --- ONLY PATH HANDLING ADDED FOR WSL ---
-    # compute Python-side absolute paths (used for reading/cleanup)
-    abs_in = os.path.abspath(input_path)
-    abs_out_dir = os.path.abspath(output_dir)
-
-    # default CLI-visible paths are the Python abs paths
-    in_cli, out_cli = abs_in, abs_out_dir
-
-    # If running in WSL and wsl_mode requested, convert paths to Windows form for the CLI
-    if _is_wsl():
-        try:
-            in_cli = to_windows_path(abs_in)
-            out_cli = to_windows_path(abs_out_dir)
-        except Exception:
-            # fallback: keep Linux absolute paths (CLI may fail if it's a Windows exe)
-            in_cli, out_cli = abs_in, abs_out_dir
-    # --- END PATH HANDLING ---
 
     # Prepare the command
     cmd_to_execute = [
-        self.liwc_cli_path, "--mode", "lsm", "--input", in_cli, "--output", out_cli, "--output-format", "csv",
+        self.liwc_cli_path, "--mode", "lsm", "--input", input_path, "--output", output_dir, "--output-format", "csv",
         "--calculate-lsm", str(calculate_lsm_value), "--group-column", str(group_column_idx), "--person-column", str(person_column_idx),
         "--text-column", str(text_column_idx), "--output-type", str(output_type_value)
     ]
@@ -554,25 +498,18 @@ def analyze_lsm(self:Liwc,
         }
     
     result = {}
-    # Read results from the Python-side output directory (abs_out_dir)
     if calculate_lsm_value in [1, 3]:
-        speaker_file = os.path.join(abs_out_dir, output_files[1])
+        speaker_file = os.path.join(output_dir, output_files[1])
         if os.path.exists(speaker_file):
             result['person_level'] = pd.read_csv(speaker_file)
     if calculate_lsm_value in [2, 3]:
-        group_file = os.path.join(abs_out_dir, output_files[2])
+        group_file = os.path.join(output_dir, output_files[2])
         if os.path.exists(group_file):
             result['group_level'] = pd.read_csv(group_file)
     
-    # Clean up temporary files and directory (use Python-side paths)
-    try:
-        os.remove(abs_in)
-    except Exception:
-        pass
-    try:
-        shutil.rmtree(abs_out_dir)
-    except Exception:
-        pass
+    # Clean up temporary files and directory
+    os.remove(input_path)
+    shutil.rmtree(output_dir)
     
     # if calculate_lsm == 3:
     #     return result
@@ -583,7 +520,7 @@ def analyze_lsm(self:Liwc,
     return result
 
 
-# %% ../nbs/00_core.ipynb 22
+# %% ../nbs/00_core.ipynb 21
 #################################################################################
 ###########################      Narrative arc       ############################
 #################################################################################
