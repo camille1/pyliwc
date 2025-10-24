@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Text Analysis using custom dictionaries – pyliwc</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-000f0825b9c55ed21d14970d810c14a9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="Text Analysis using custom dictionaries – pyliwc">
+<meta property="og:description" content="Linguistic Inquiry and Word Count (LIWC) in Python">
+<meta property="og:site_name" content="pyliwc">
+<meta name="twitter:title" content="Text Analysis using custom dictionaries – pyliwc">
+<meta name="twitter:description" content="Linguistic Inquiry and Word Count (LIWC) in Python">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">pyliwc</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tutorial1_us_presidents.html">Tutorials</a></li><li class="breadcrumb-item"><a href="./tutorial2_custom_dictionaries.html">Text Analysis using custom dictionaries</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome to <code>pyliwc</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./installation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Installation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quickstart.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quickstart</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./how-to-use.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">How to use</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Tutorials</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial1_us_presidents.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Text Analysis of U.S. Presidents’ Inaugural Addresses</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial2_custom_dictionaries.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Text Analysis using custom dictionaries</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">API reference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./license.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">License</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#internal-dictionnaries" id="toc-internal-dictionnaries" class="nav-link active" data-scroll-target="#internal-dictionnaries">Internal Dictionnaries</a></li>
+  <li><a href="#user-created-liwc-dictionaries" id="toc-user-created-liwc-dictionaries" class="nav-link" data-scroll-target="#user-created-liwc-dictionaries">User-Created LIWC Dictionaries</a></li>
+  <li><a href="#other-dictionaries-available" id="toc-other-dictionaries-available" class="nav-link" data-scroll-target="#other-dictionaries-available">Other Dictionaries Available</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/camille1/pyliwc.git/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="tutorial2_custom_dictionaries.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tutorial1_us_presidents.html">Tutorials</a></li><li class="breadcrumb-item"><a href="./tutorial2_custom_dictionaries.html">Text Analysis using custom dictionaries</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Text Analysis using custom dictionaries</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p>The pyliwc package is a powerful tool for text analysis using the LIWC framework. It helps in quantifying various linguistic and psychological features from text data, making it invaluable for researchers and data scientists interested in text analytics.</p>
+<p>In this tutorial, we will focus on analyzing a simple string. The goal is to gain insights into their linguistic styles and psychological attributes as expressed in their speeches using custom dictionnaries.</p>
+<section id="internal-dictionnaries" class="level1">
+<h1>Internal Dictionnaries</h1>
+<p>The default internal dictionaries available are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 51%">
+<col style="width: 15%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dictionary</th>
+<th>Language</th>
+<th>Parameter Value in <code>liwc_dict</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>LIWC-22 Dictionary</em></td>
+<td>English</td>
+<td>LIWC22</td>
+</tr>
+<tr class="even">
+<td><em>LIWC2015 Dictionary</em></td>
+<td>English</td>
+<td>LIWC2015</td>
+</tr>
+<tr class="odd">
+<td><em>LIWC2007 Dictionary</em></td>
+<td>English</td>
+<td>LIWC2007</td>
+</tr>
+<tr class="even">
+<td><em>LIWC2001 Dictionary</em></td>
+<td>English</td>
+<td>LIWC2001</td>
+</tr>
+<tr class="odd">
+<td><em>DE-LIWC2015 Dictionary</em></td>
+<td>German</td>
+<td>DE-LIWC2015</td>
+</tr>
+<tr class="even">
+<td><em>LIWC2015 Dictionary - Chinese (Simplified) (v1.5)</em></td>
+<td>Chinese (Simplified)</td>
+<td>CHNSIMPLLIWC2015</td>
+</tr>
+<tr class="odd">
+<td><em>LIWC2015 Dictionary - Chinese (Traditional) (v1.5)</em></td>
+<td>Chinese (Traditional)</td>
+<td>CHNTRADLIWC2015</td>
+</tr>
+<tr class="even">
+<td><em>MR-LIWC2015 Dictionary</em></td>
+<td>Marathi</td>
+<td>MRLIWC2015</td>
+</tr>
+<tr class="odd">
+<td><em>ES-LIWC2007</em></td>
+<td>Spanish</td>
+<td>ESLIWC2007</td>
+</tr>
+<tr class="even">
+<td><em>J-LIWC2015 Dictionary</em></td>
+<td>Japanese</td>
+<td>JLIWC2015</td>
+</tr>
+</tbody>
+</table>
+<p>*LIWC22 is the default option</p>
+<div id="2dabee86-ad9b-40c6-8b04-db786f85a88d" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyliwc <span class="im">import</span> Liwc</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the Liwc instance with the LIWC CLI executable</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>liwc <span class="op">=</span> Liwc(<span class="st">'LIWC-22-cli.exe'</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">"On this day, we gather because we have chosen hope over fear, unity of purpose over conflict and discord."</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> liwc.analyze_string_to_json(text, liwc_dict<span class="op">=</span><span class="st">'LIWC2015'</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(r)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Picked up JAVA_TOOL_OPTIONS: -Dfile.encoding=UTF-8</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'Segment': 1, 'WC': 19, 'Analytic': 77.17, 'Clout': 99, 'Authentic': 19.27, 'Tone': 25.77, 'WPS': 19, 'Sixltr': 21.05, 'Dic': 78.95, 'function': 52.63, 'pronoun': 15.79, 'ppron': 10.53, 'i': 0, 'we': 10.53, 'you': 0, 'shehe': 0, 'they': 0, 'ipron': 5.26, 'article': 0, 'prep': 21.05, 'auxverb': 5.26, 'adverb': 0, 'conj': 10.53, 'negate': 0, 'verb': 10.53, 'adj': 0, 'compare': 0, 'interrog': 0, 'number': 0, 'quant': 0, 'affect': 10.53, 'posemo': 5.26, 'negemo': 5.26, 'anx': 5.26, 'anger': 0, 'sad': 0, 'social': 15.79, 'family': 0, 'friend': 0, 'female': 0, 'male': 0, 'cogproc': 15.79, 'insight': 0, 'cause': 10.53, 'discrep': 5.26, 'tentat': 5.26, 'certain': 0, 'differ': 0, 'percept': 0, 'see': 0, 'hear': 0, 'feel': 0, 'bio': 0, 'body': 0, 'health': 0, 'sexual': 0, 'ingest': 0, 'drives': 31.58, 'affiliation': 15.79, 'achieve': 5.26, 'power': 10.53, 'reward': 0, 'risk': 0, 'focuspast': 0, 'focuspresent': 10.53, 'focusfuture': 5.26, 'relativ': 21.05, 'motion': 0, 'space': 15.79, 'time': 5.26, 'work': 0, 'leisure': 0, 'home': 0, 'money': 0, 'relig': 0, 'death': 0, 'informal': 0, 'swear': 0, 'netspeak': 0, 'assent': 0, 'nonflu': 0, 'filler': 0, 'AllPunc': 15.79, 'Period': 5.26, 'Comma': 10.53, 'Colon': 0, 'SemiC': 0, 'QMark': 0, 'Exclam': 0, 'Dash': 0, 'Quote': 0, 'Apostro': 0, 'Parenth': 0, 'OtherP': 0, 'Emoji': 0}</code></pre>
+</div>
+</div>
+</section>
+<section id="user-created-liwc-dictionaries" class="level1">
+<h1>User-Created LIWC Dictionaries</h1>
+<p>If you would like to analyze your text with an external dictionary file, you may alternatively provide the path to your dictionary.</p>
+<p>Visit <a href="https://www.liwc.app/dictionaries/dict-user">liwc.app/dictionaries</a> to download a user-created dictionnary.</p>
+<p>Here is an example to measure the 10 Schwartz Values (and 4 higher-order value dimensions) using the dictionary developed by Ponizovskiy et al.&nbsp;(2020). &gt; Ponizovskiy, V., Ardag, M., Grigoryan, L., Boyd, R., Dobewall, H., &amp; Holtz, P. (2020). Development and validation of the Personal Values Dictionary: A theory-driven tool for investigating references to basic human values in text. European Journal of Personality, 34(5), 885–902. https://doi.org/10.1002/per.2294</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyliwc <span class="im">import</span> Liwc</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the Liwc instance with the LIWC CLI executable</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>liwc <span class="op">=</span> Liwc(<span class="st">'LIWC-22-cli.exe'</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">"On this day, we gather because we have chosen hope over fear, unity of purpose over conflict and discord."</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> liwc.analyze_string_to_json(text, liwc_dict<span class="op">=</span><span class="st">'dictionaries/stereotype-content-dictionary.dicx'</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(r)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Segment                       <span class="fl">1.00</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>WC                           <span class="fl">19.00</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>WPS                          <span class="fl">19.00</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>BigWords                     <span class="fl">21.05</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>Dic                          <span class="fl">26.32</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>Valence_Pos                   <span class="fl">3.00</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>Valence_Neg                   <span class="fl">4.11</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>Valence_Neut                 <span class="fl">19.21</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>Sociability_Freq              <span class="fl">0.00</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>Sociability_Direction         <span class="fl">0.00</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>Morality_Freq               <span class="fl">526.32</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>Morality_Direction           <span class="op">-</span><span class="fl">5.26</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>Ability_Freq                  <span class="fl">0.00</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>Ability_Direction             <span class="fl">0.00</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>Agency_Freq                <span class="fl">1052.63</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>Agency_Direction              <span class="fl">0.00</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>Health_Freq                 <span class="fl">526.32</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>Health_Direction             <span class="op">-</span><span class="fl">5.26</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>Status_Freq                   <span class="fl">0.00</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>Status_Direction              <span class="fl">0.00</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>Work_Freq                     <span class="fl">0.00</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>Work_Direction                <span class="fl">0.00</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>Politics_Freq                 <span class="fl">0.00</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>Politics_Direction            <span class="fl">0.00</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>Religion_Freq                 <span class="fl">0.00</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>Religion_Direction            <span class="fl">0.00</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>Beliefs_Other_Freq            <span class="fl">0.00</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>Beliefs_Other_Direction       <span class="fl">0.00</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>Inhabitant_Freq               <span class="fl">0.00</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>Country_Freq                  <span class="fl">0.00</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>Feelings_Freq              <span class="fl">1052.63</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>Relatives_Freq                <span class="fl">0.00</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>Clothing_Freq                 <span class="fl">0.00</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>Ordinariness_Freq             <span class="fl">0.00</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>Ordinariness_Direction        <span class="fl">0.00</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>Body_Part_Freq                <span class="fl">0.00</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>Body_Property_Freq            <span class="fl">0.00</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>Skin_Freq                     <span class="fl">0.00</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>Body_Covering_Freq            <span class="fl">0.00</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>Beauty_Freq                   <span class="fl">0.00</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>Beauty_Direction              <span class="fl">0.00</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>Insults_Freq                  <span class="fl">0.00</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>STEM_Freq                     <span class="fl">0.00</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>Humanities_Freq               <span class="fl">0.00</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>Art_Freq                      <span class="fl">0.00</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>Social_Groups_Freq            <span class="fl">0.00</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>Lacks_Knowledge_Freq          <span class="fl">0.00</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>Fortune_Freq                  <span class="fl">0.00</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>AllPunc                      <span class="fl">15.79</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>Period                        <span class="fl">5.26</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>Comma                        <span class="fl">10.53</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>QMark                         <span class="fl">0.00</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>Exclam                        <span class="fl">0.00</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>Apostro                       <span class="fl">0.00</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>OtherP                        <span class="fl">0.00</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>Emoji                         <span class="fl">0.00</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="other-dictionaries-available" class="level1">
+<h1>Other Dictionaries Available</h1>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 50%">
+<col style="width: 20%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dictionary Name</th>
+<th>Description</th>
+<th>Author</th>
+<th>Uploaded</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Absolutist Dictionary</td>
+<td>Measures absolutist thinking (e.g., always, never) in texts</td>
+<td>Al-Mosaiwi &amp; Johnstone</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Age Stereotypes Dictionary</td>
+<td>Reflects eight broadly-defined stereotypes identified in past research as descriptive of older adults</td>
+<td>Jessica Remedios</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Agitation/Dejection Dictionary</td>
+<td>Based on studies linking promotion versus prevention focus with the emotions “Agitation” and “Dejection”</td>
+<td>Johnsen et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>AI Focus Dictionary</td>
+<td>122 AI-related words for measuring a company’s focus on AI</td>
+<td>Mishra, Ewing, &amp; Cooper</td>
+<td>2024-03-14</td>
+</tr>
+<tr class="odd">
+<td>American Indian Stereotype Dictionary</td>
+<td>A custom dictionary to find the prevalence of words associated with American Indian stereotypes and conventional narratives</td>
+<td>Aleksandra Sherman</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>anticoagulation</td>
+<td>Words associated with anticoagulation therapy - primarily nouns added to supplement existing dictionaries</td>
+<td>Peter Whittaker</td>
+<td>2023-02-11</td>
+</tr>
+<tr class="odd">
+<td>Behavioral Activation Dictionary</td>
+<td>Captures linguistic indicators of planning and participation in enjoyable activities</td>
+<td>Burkhardt et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Big Two (Agency &amp; Communion) Dictionary</td>
+<td>Measure the degree to which a person is thinking in terms of agency/communion.</td>
+<td>Pietraszkiewicz et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Body Type Dictionary</td>
+<td>A content analysis dictionary for automating the scoring of Fisher &amp; Cleveland’s (1958) body type framework in English-language texts.</td>
+<td>Andrew Wilson</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Brand Personality Dictionary</td>
+<td>Assesses Aaker’s five brand personality dimensions as well as 42 personality trait norms</td>
+<td>Opoku et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Climate Change Dictionary</td>
+<td>Dictionary used to quantify mentions of climate change in online discussion</td>
+<td>Miti Shah</td>
+<td>2023-05-23</td>
+</tr>
+<tr class="even">
+<td>Controversial Terms Lexicon</td>
+<td>A lexicon of terms that range in their degree of controversiality, particularly in terms of their use in the media.</td>
+<td>Mejova et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Corporate Social Responsibility Dictionary</td>
+<td>Reveals four dimensions of corporate social responsibility</td>
+<td>Nadra Pencle &amp; Irina Mălăescu</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Cost/Benefit Dictionary</td>
+<td>Measures language related to perceived costs and benefits that result from a decision or behavior.</td>
+<td>Michael McCullough</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Creativity and Innovation Dictionary</td>
+<td>Language describing creation and/or innovation</td>
+<td>Neufeld and Gaucher</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Crovitz Innovator Identification Method</td>
+<td>Identify “innovators” and “non-innovators” using Hebert F. Crovitz’s 42 relational words</td>
+<td>Greco et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Dehumanization Dictionary</td>
+<td>Measures several types of (de)humanization, such as mechanistic and animalistic dehumanization</td>
+<td>Samantha Platten</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Diccionario de polaridad y clase de palabras - Esp</td>
+<td>Diccionario de polaridad (+/-) por clases de palabras</td>
+<td>Javier Blasco-Pascual</td>
+<td>2022-09-13</td>
+</tr>
+<tr class="odd">
+<td>Digital Orientation Dimensions</td>
+<td>Digital orientation dimensions keyword classification based on the research of Kindermann et al.&nbsp;(2021)</td>
+<td>Konstantinos Emexidis</td>
+<td>2023-05-17</td>
+</tr>
+<tr class="even">
+<td>Empath Default Dictionary</td>
+<td>General content-coding dictionary from the “Empath” package</td>
+<td>Fast, Chen, &amp; Bernstein</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Empathic Concern Lexicon</td>
+<td>An automatically created empathy dictionary extracted from document-level ratings</td>
+<td>João Sedoc</td>
+<td>2023-09-14</td>
+</tr>
+<tr class="even">
+<td>English Prime Dictionary</td>
+<td>Captures violations of the English Prime system, a theoretical marker of cognitive inflexibility.</td>
+<td>Ryan L. Boyd</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Enriched American Food Lexicon</td>
+<td>Dictionary containing ~500 foods mapped to USDA categories, with some caloric information.</td>
+<td>Abbar et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Entrepreneurial and Mentoring Dictionary</td>
+<td>A dictionary of entrepreneurial and mentoring terms</td>
+<td>Steven D’Alessandro and Morgan Miles</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>extended Moral Foundations Dictionary (eMFD)</td>
+<td>The eMFD, unlike previous methods, is constructed from text annotations generated by a large sample of human coders.</td>
+<td>Hopp et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Foresight Lexicon</td>
+<td>Measures the degree to which anticipation/foresight occurs. That is, words pointing to indicate where things are heading (often on the basis of recurrent behaviors).</td>
+<td>Robert Hogenraad</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Forest Values Dictionary</td>
+<td>Reflects four distinct ways in which people value forests and forest ecosystems</td>
+<td>Bengston &amp; Xu</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>General Inquirer IV</td>
+<td>The “original” mainstream text analysis dictionary that is still used often today. Many categories are of questionable validity.</td>
+<td>Philip Stone et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>German-Language STEM Dictionary</td>
+<td>Used to measure communication about STEM (Science, Technology, Engineering, Mathematics).</td>
+<td>Michael Heilemann</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Global Citizen Dictionary</td>
+<td>A dictionary to assess language usage related to global citizenship</td>
+<td>Stephen Reysen et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Grant Evaluation Dictionary</td>
+<td>Captures categories relevant to scientific grant review (ability, achievement, agentic, research, standout, pos eval, neg eval)</td>
+<td>Kaatz et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Grievance Dictionary</td>
+<td>A psycholinguistic dictionary that can be used to automatically understand language use in the context of grievance-fueled violence threat assessment</td>
+<td>Isabelle van der Vegt</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Home Perceptions Dictionary</td>
+<td>Calculates the frequency of words describing clutter, a sense of the home as unfinished, restful words, and nature words</td>
+<td>Saxbe &amp; Repetti</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Honor Dictionary</td>
+<td>This dictionary is designed to diagnose “honor talk” in any text that you are interested in analyzing.</td>
+<td>Gelfand et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Imagination Lexicon</td>
+<td>Digital lexicon of 627 entries relative to imagination and transfiguration, i.e., words pointing to the unbelievable and whatever is beyond the real.</td>
+<td>Robert Hogenraad</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Incel Violent Extremism Dictionary</td>
+<td>Three types of words, including common words about violence, weapons, and some of the most recognizable incel terms</td>
+<td>Baele et al.</td>
+<td>2023-02-13</td>
+</tr>
+<tr class="odd">
+<td>Invective Dictionary</td>
+<td>Use this dictionary to detect invective language in narrative</td>
+<td>A. T. Panter</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Linguistic Category Model (LCM) Dictionary</td>
+<td>A computerized LCM analysis method</td>
+<td>Yi-Tai Seih</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>LIWC-UD: Urban Dictionary LIWC Supplements</td>
+<td>An automatically generated extension to LIWC’s dictionary which includes terms defined in Urban Dictionary</td>
+<td>Bahgat, Wilson, &amp; Magdy</td>
+<td>2023-02-13</td>
+</tr>
+<tr class="even">
+<td>Loughran-McDonald LM dic</td>
+<td>Loughran-McDonald</td>
+<td>Loughran-McDonald</td>
+<td>2023-09-14</td>
+</tr>
+<tr class="odd">
+<td>Loughran-McDonald financial sentiment</td>
+<td>Tone dictionary</td>
+<td>Loughran-McDonald</td>
+<td>2023-03-07</td>
+</tr>
+<tr class="even">
+<td>Loughran-McDonald Financial Sentiment Dictionary</td>
+<td>Dictionary for measuring positive and negative sentiment specifically in financial texts.</td>
+<td>Loughran &amp; McDonald</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>MarcadoresDiscursivos - Español.dicx</td>
+<td>Diccionario nativo de partículas discursivas del español</td>
+<td>Javier Blasco-Pascual</td>
+<td>2022-08-25</td>
+</tr>
+<tr class="even">
+<td>Masculine &amp; Feminine Words</td>
+<td>List of masculine and feminine words from Gaucher et al.&nbsp;(2011)</td>
+<td>Maureen McCusker</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Mindfulness Dictionary</td>
+<td>Two categories of mindfulness language describing the mindfulness state and the more encompassing “mindfulness journey”</td>
+<td>Collins et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Mind Perception Dictionary</td>
+<td>Measures linguistic use of mind perception (words related to “agency” and “experience”) in naturalistic settings</td>
+<td>Schweitzer &amp; Waytz</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Moral Foundations Dictionary 2.0</td>
+<td>An updated version of the Moral Foundations Dictionary that is recommended over the original by its creators.</td>
+<td>Jeremy Frimer</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Moral Foundations Dictionary</td>
+<td>Provides information on the proportions of virtue and vice words for each foundation on whatever corpus of text you are interested in</td>
+<td>Jesse Graham and Jonathan Haidt</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Morality-as-Cooperation Dictionary</td>
+<td>Codes for constructs from the “Morality-as-Cooperation” theory, originating from ethnographic accounts of morality</td>
+<td>Mark Alfano, Marc Cheong, &amp; Oliver Scott Curry</td>
+<td>2024-02-29</td>
+</tr>
+<tr class="even">
+<td>Moral Justification Dictionary</td>
+<td>Measures variation in justification content (deontological, consequentialist, or emotive) as a function of moral foundations</td>
+<td>Wheeler &amp; Laham</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Moral Universalism in French</td>
+<td>A set of terminologies associated with morally universal language, based on the English version of Graham et al.</td>
+<td>Michael Jetter &amp; Akim Defesche</td>
+<td>2024-05-21</td>
+</tr>
+<tr class="even">
+<td>Moral Universalism in German</td>
+<td>A set of terminologies associated with morally universal language, based on the English version of Graham et al.</td>
+<td>Michael Jetter</td>
+<td>2024-05-21</td>
+</tr>
+<tr class="odd">
+<td>Moral Universalism in Italian</td>
+<td>A set of terminologies associated with morally universal language, based on the English version of Graham et al.</td>
+<td>Michael Jetter &amp; Marianna Piantavigna</td>
+<td>2024-05-21</td>
+</tr>
+<tr class="even">
+<td>Moral Universalism in Spanish</td>
+<td>A set of terminologies associated with morally universal language</td>
+<td>Michael Jetter &amp; Raquel Bra Nunez</td>
+<td>2024-05-01</td>
+</tr>
+<tr class="odd">
+<td>Motivated Social Cognition Dictionary</td>
+<td>Measures the degree to which a person is thinking in a way that reflects various motivated social cognitions (e.g., uncertainty avoidance)</td>
+<td>Jayme Renfro et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Mystical Language Dictionary</td>
+<td>A set of words that, when encountered in an experience report, indicate the occurrence of mystical elements within the experience.</td>
+<td>Marija Franka Žuljevića et al.</td>
+<td>2023-11-03</td>
+</tr>
+<tr class="odd">
+<td>Nonconformity</td>
+<td>Nonconformity</td>
+<td>Patti</td>
+<td>2024-03-12</td>
+</tr>
+<tr class="even">
+<td>Nostalgia Dictionary</td>
+<td>A 98-word dictionary that captures expressions of nostalgia in text.</td>
+<td>Jia Chen</td>
+<td>2023-05-16</td>
+</tr>
+<tr class="odd">
+<td>Open Science Dictionary</td>
+<td>This is a validated dictionary that taps into open science categories (e.g., open science, preregistration, replication)</td>
+<td>David Markowitz</td>
+<td>2022-05-08</td>
+</tr>
+<tr class="even">
+<td>Pain Dictionary</td>
+<td>Measures the language of pain disclosure. Made with special attention to previously validated pain scales</td>
+<td>Wright et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Personal Values Dictionary</td>
+<td>Measures the 10 Schwartz Values (and 4 higher-order value dimensions).</td>
+<td>Ponizovskiy et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Physiological Sensations Dictionary</td>
+<td>Measures the amount that a person is describing physical sensations (e.g., bloated, dizzy, faint).</td>
+<td>Shaffer, Kim, &amp; Yoon</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Policy Position Dictionary</td>
+<td>Provides estimation of the policy position of political texts (e.g., transcribed speeches) in the United Kingdom</td>
+<td>Laver &amp; Garry</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Pornography Lexicon Dictionary</td>
+<td>This lexicon is based on merging LIWC’s internal lexica of sexuality and drives (2015) with Essam’s lexicon of pornography (2017).</td>
+<td>Encarnacion S. Arenas</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Privacy Dictionary</td>
+<td>Contains a list of words that people use when talking about privacy. Organised into 8 categories that measure different dimensions of privacy</td>
+<td>Vasalou et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>promotion</td>
+<td>PROMFOC</td>
+<td>Gamache</td>
+<td>2023-11-06</td>
+</tr>
+<tr class="odd">
+<td>Prorefugee Content Dictionary</td>
+<td>Measures the proportion of words that contained prorefugee content within a text (rather than refugee content in general)</td>
+<td>Smith et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Prosocial Words Dictionary</td>
+<td>Calculates the density of prosocial words in anything that a person says</td>
+<td>Jeremy Frimer</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Qualia Dictionary</td>
+<td>Words referring to the five senses, broken down into types of qualia (e.g., for vision: colors, luminance, actions, and shapes).</td>
+<td>Molly Ireland et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Regressive Imagery Dictionary</td>
+<td>Dictionary designed to capture primary (i.e., primordial) and secondary (i.e., “conceptual”) processes from natural language.</td>
+<td>Colin Martindale</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Regulatory Mode Dictionary</td>
+<td>Locomotion and Assessment States of Goal Pursuit</td>
+<td>Dana Kanze, Mark A. Conley, and E. Tory Higgins</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Romantic Love Dictionary</td>
+<td>Measures of “emotional investment” and “attraction” for historical assessment of romantic love</td>
+<td>Mauricio de Jesus Dias Martins &amp; Nicolas Baumard</td>
+<td>2023-12-27</td>
+</tr>
+<tr class="odd">
+<td>Security Language Dictionary</td>
+<td>Provides a reference for the comparative study of security-related linguistic repertoires in political texts (speeches, policy documents, etc.).</td>
+<td>Stephane Baele &amp; Olivier Sterck</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Self-Care Dictionary</td>
+<td>Measures the degree to which self-care words are used (e.g., diet, yoga)</td>
+<td>Xunyi Wang et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Self-Determination/Self-Talk Dictionary</td>
+<td>Designed for use with self-talk data. Measures autonomy-supportive versus controlling language within self-talk.</td>
+<td>Oliver et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Self-Transcendent Emotion Dictionary (STED)</td>
+<td>Scores texts for emotions that are invaluable to promote greater human connectedness, prosociality, and human flourishing</td>
+<td>Ji &amp; Raney</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Situational 8 Dictionary (S8-LIWC)</td>
+<td>Captures language that corresponds to each of the DIAMONDS dimensions of situations</td>
+<td>David G. Serfass</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Sleep Dictionary</td>
+<td>A dictionary designed to capture sleep-related communications</td>
+<td>Ilana Ladis</td>
+<td>2023-02-11</td>
+</tr>
+<tr class="odd">
+<td>Social Ties Dictionary</td>
+<td>Assesses spontaneous indicators of important social relationships</td>
+<td>Pressman &amp; Cohen</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Stereotype Content Dictionary</td>
+<td>A stereotype content dictionary, made using a semi-automated method, to capture the Stereotype Content Model in text</td>
+<td>Nicolas et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Stress Dictionary</td>
+<td>A dictionary used to measure psychological stress. Created based on the LIWC2007 English Dictionary.</td>
+<td>Wei Wang et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>The Weighted Reflection-Reorganizing List</td>
+<td>Captures reflection on the emotional significance of an event or events in one’s own or someone else’s life, or in a dream/fantasy.</td>
+<td>Murphy, Bucci, &amp; Maskit</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Threat Dictionary</td>
+<td>This dictionary was designed to diagnose threatening language in any text that interests you.</td>
+<td>Virginia K. Choi et al.</td>
+<td>2022-02-23</td>
+</tr>
+<tr class="even">
+<td>Transactive Memory Systems (TMS) Strength</td>
+<td>This dictionary provides a measure of the positive and negative indicators of TMS from group conversational text.</td>
+<td>Jonathan Kush, Brandy Aven, Linda Argote</td>
+<td>2023-08-10</td>
+</tr>
+<tr class="odd">
+<td>Water Metaphor Dictionary</td>
+<td>Measures the frequency of inundation-metaphoric expressions as it relates to immigration.</td>
+<td>Tyler Jimenez</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Weighted Referential Activity Dictionary</td>
+<td>Yields a Referential Activity (RA) score for any natural language segment.</td>
+<td>Bucci &amp; Maskit</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="odd">
+<td>Well-being Dictionary</td>
+<td>Words that might indicate the presence of purpose or meaning</td>
+<td>Ratner et al.</td>
+<td>2022-01-01</td>
+</tr>
+<tr class="even">
+<td>Whirlall Dictionary</td>
+<td>Measures words related to “whirling” and “twirling” in Rorschach responses</td>
+<td>Ryan L. Boyd</td>
+<td>2022-01-01</td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/camille1\.github\.io\/pyliwc");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/camille1/pyliwc.git/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
