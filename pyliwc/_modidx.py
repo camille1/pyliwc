@@ -2,8 +2,8 @@
 
 d = { 'settings': { 'branch': 'main',
                 'doc_baseurl': '/pyliwc',
-                'doc_host': 'https://camillelacan.github.io',
-                'git_url': 'https://github.com/camillelacan/pyliwc',
+                'doc_host': 'https://camille1.github.io',
+                'git_url': 'https://github.com/camille1/pyliwc.git',
                 'lib_path': 'pyliwc'},
   'syms': { 'pyliwc.core': { 'pyliwc.core.Liwc': ('core.html#liwc', 'pyliwc/core.py'),
                              'pyliwc.core.Liwc.__init__': ('core.html#liwc.__init__', 'pyliwc/core.py'),
@@ -30,4 +30,6 @@ d = { 'settings': { 'branch': 'main',
                              'pyliwc.core._LIWCDictionary.search': ('core.html#_liwcdictionary.search', 'pyliwc/core.py'),
                              'pyliwc.core._LIWCDictionary.word_in_categories': ( 'core.html#_liwcdictionary.word_in_categories',
                                                                                  'pyliwc/core.py'),
+                             'pyliwc.core._is_wsl': ('core.html#_is_wsl', 'pyliwc/core.py'),
+                             'pyliwc.core._looks_like_windows_path': ('core.html#_looks_like_windows_path', 'pyliwc/core.py'),
                              'pyliwc.core.to_windows_path': ('core.html#to_windows_path', 'pyliwc/core.py')}}}
