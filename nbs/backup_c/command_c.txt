@@ -22,7 +22,7 @@ nbdev_prepare
 # nbdev_test --n_workers 1
 # hide #ipynb-filters: [nbdev_filter] --> in_quarto.yml pour eviter bug deploy github actions
 
-#nvdev_release (both pypi and conda)
+#nbvdev_release (both pypi and conda)
 
 
 
